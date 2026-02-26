@@ -1446,11 +1446,7 @@ hotel-booking-system/
 เขียนคำตอบที่นี่
 ```
 
-**คำถามที่ 4:** เหตุใดจึงไม่ควรใช้ `body-parser` แยกต่างหากใน Express 4.16+ และ Express 5 ต่างจาก Express 4 อย่างไรในแง่ของการจัดการ async route handlers?
 
-```
-เขียนคำตอบที่นี่
-```
 
 ---
 
@@ -1459,8 +1455,7 @@ hotel-booking-system/
 - [ ] รูปผลการทดลองตามที่กำหนดในแต่ละขั้นตอน (แทรกในไฟล์นี้)
 - [ ] โค้ดที่แก้ไข: `server.js` (DELETE endpoint + GET `/api/users`)
 - [ ] ผลการทดสอบ Login / Logout บน Frontend พร้อมรูปภาพ
-- [ ] คำตอบคำถามท้ายใบงาน ครบทั้ง 4 ข้อ
+- [ ] คำตอบคำถามท้ายใบงาน ครบทั้ง 3 ข้อ
 
 ---
 
-*ใบงานนี้อ้างอิง repository: [Software-Design-and-Development-Booking-App-Demo](https://github.com/surachai-p/Software-Design-and-Development-Booking-App-Demo.git)*
