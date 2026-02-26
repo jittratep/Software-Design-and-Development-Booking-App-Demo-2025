@@ -629,6 +629,44 @@ export default {
 mkdir -p src/components src/contexts
 ```
 
+---
+
+**สร้างไฟล์ `.env`** ในโฟลเดอร์ `frontend/` เพื่อกำหนด URL ของ Backend
+
+```bash
+# frontend/.env
+VITE_API_URL=http://localhost:3001
+```
+
+> 💡 การใช้ `.env` ทำให้เปลี่ยน port ได้ที่เดียวโดยไม่ต้องแก้ทุก component ถ้า backend รันที่ port อื่น เช่น 3002 ให้แก้แค่บรรทัดนี้บรรทัดเดียว
+
+**สร้างไฟล์ `src/config.js`** เพื่อใช้ค่าจาก `.env` ทั่วทั้งแอป
+
+```javascript
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+export default API_URL;
+```
+
+**เพิ่ม `.env` ใน `.gitignore`** เพื่อไม่ให้ push ขึ้น GitHub
+
+```bash
+# เปิดไฟล์ .gitignore แล้วเพิ่มบรรทัดนี้
+.env
+.env.local
+```
+
+แล้วสร้าง `.env.example` ไว้เป็นตัวอย่างสำหรับคนอื่นในทีม
+
+```bash
+# frontend/.env.example
+VITE_API_URL=http://localhost:3001
+```
+
+> ⚠️ **ทุกครั้งที่แก้ไฟล์ `.env` ต้องรัน `npm run dev` ใหม่** เพราะ Vite โหลดค่า environment variable ตอนเริ่มต้นเท่านั้น
+
+---
+
 **ทดสอบรัน**
 
 ```bash
@@ -705,6 +743,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
+import API_URL from '../config';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -718,7 +757,7 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3001/api/login', formData);
+      const response = await axios.post(`${API_URL}/api/login`, formData);
       login(response.data.user, response.data.token);
       navigate('/admin');
     } catch (err) {
@@ -807,6 +846,7 @@ export default ProtectedRoute;
 ```jsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
@@ -844,7 +884,7 @@ const BookingForm = () => {
 
     if (window.confirm(summary + '\n\nยืนยันการจอง?')) {
       try {
-        await axios.post('http://localhost:3001/api/bookings', formData);
+        await axios.post(`${API_URL}/api/bookings`, formData);
         setSuccess('จองห้องพักเรียบร้อยแล้ว');
         setFormData({ fullname: '', email: '', phone: '', checkin: '', checkout: '', roomtype: '', guests: 1 });
       } catch (err) {
@@ -928,6 +968,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import API_URL from '../config';
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -939,7 +980,7 @@ const BookingList = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/bookings', {
+      const response = await axios.get(`${API_URL}/api/bookings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(response.data);
@@ -957,7 +998,7 @@ const BookingList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('ต้องการลบข้อมูลการจองนี้?')) return;
     try {
-      await axios.delete(`http://localhost:3001/api/bookings/${id}`, {
+      await axios.delete(`${API_URL}/api/bookings/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchBookings();
@@ -1031,6 +1072,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
+import API_URL from '../config';
 
 const BookingEdit = () => {
   const { id }         = useParams();
@@ -1048,7 +1090,7 @@ const BookingEdit = () => {
 
   const fetchBooking = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/bookings/${id}`, {
+      const response = await axios.get(`${API_URL}/api/bookings/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const booking = response.data;
@@ -1070,7 +1112,7 @@ const BookingEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3001/api/bookings/${id}`, formData, {
+      await axios.put(`${API_URL}/api/bookings/${id}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('แก้ไขข้อมูลสำเร็จ');
