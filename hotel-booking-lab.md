@@ -1,4 +1,4 @@
-# ใบงานปฏิบัติการ: การพัฒนาระบบจองห้องพักออนไลน์แบบครบวงจร
+# ใบงานปฏิบัติการ: การพัฒนาระบบจองห้องพักออนไลน์
 ### Full-Stack Hotel Booking System with Authentication
 
 > **วิชา:** การออกแบบและพัฒนาซอฟต์แวร์ (Software Design and Development)  
