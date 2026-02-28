@@ -82,6 +82,16 @@ app.get('/api/bookings', authenticateToken, (req, res) => {
   });
 });
 
+// GET /api/users — ดูรายการ user ทั้งหมด (ต้อง login และไม่แสดง password)
+app.get('/api/users', authenticateToken, (req, res) => {
+  const sql = 'SELECT id, username, role, created_at FROM users';
+  
+  db.all(sql, [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
 // GET /api/bookings/:id — ดึงข้อมูลตาม ID (ต้อง login)
 app.get('/api/bookings/:id', authenticateToken, (req, res) => {
   db.get('SELECT * FROM bookings WHERE id = ?', [req.params.id], (err, row) => {
@@ -117,7 +127,7 @@ app.delete('/api/bookings/:id', authenticateToken, (req, res) => {
   db.run('DELETE FROM bookings WHERE id = ?', [req.params.id], function(err) {
     if (err)             return res.status(400).json({ error: err.message });
     if (this.changes === 0) return res.status(404).json({ error: 'ไม่พบข้อมูลการจอง' });
-    res.json({ message: 'ลบข้อมูลสำเร็จ', id: req.params.id });
+    res.json({ message: 'ลบข้อมูลสำเร็จโดย jittratep pachamni', id: req.params.id });
   });
 });
 
